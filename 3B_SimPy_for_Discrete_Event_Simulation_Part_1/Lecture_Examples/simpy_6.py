@@ -12,6 +12,9 @@ import random
 from statistics import mean
 import csv
 import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+from datetime import datetime
 
 # One arrivals generator function - for those coming for weight loss clinic
 def patient_generator_weight_loss(env, wl_inter, mean_consult, nurse):
@@ -146,3 +149,48 @@ print ("Max mean queuing result over trial :",
 print ("Min mean queuing result over trial :",
        f"{min_trial_queuing_time_nurse:.2f}")
 
+# Create a scatter plot
+plt.scatter(results_df['Run'], results_df['Mean Q Nurse'])
+
+# Calculate the average of 'Mean Q Nurse'
+average_mean_q_nurse = np.nanmean(results_df['Mean Q Nurse'])
+
+# Calculate the minimum and maximum values of 'Mean Q Nurse'
+min_mean_q_nurse = np.nanmin(results_df['Mean Q Nurse'])
+max_mean_q_nurse = np.nanmax(results_df['Mean Q Nurse'])
+
+# Add a horizontal line at the average value
+plt.axhline(y=average_mean_q_nurse, color='red', linestyle='--', label='Average')
+
+# Add horizontal lines at the minimum and maximum values
+plt.axhline(y=min_mean_q_nurse, color='green', linestyle='--', label='Min')
+plt.axhline(y=max_mean_q_nurse, color='black', linestyle='--', label='Max')
+
+# Add the minimum value as text to the plot
+plt.text(2.5, min_mean_q_nurse, f'Min: {min_mean_q_nurse:.2f}', color='green', fontsize=10, ha='center', va='top')
+
+# Add the maximum value as text to the plot
+plt.text(7.5, max_mean_q_nurse, f'Max: {max_mean_q_nurse:.2f}', color='blue', fontsize=10, ha='center', va='bottom')
+
+# Customize the plot
+plt.xlabel('Run')
+plt.ylabel('Mean Q Nurse')
+plt.title('Scatter Plot: Run vs. Mean Q Nurse')
+plt.grid(True)
+plt.legend()
+
+# Add the average value as text to the plot
+plt.text(2.5, average_mean_q_nurse, f'Avg: {average_mean_q_nurse:.2f}', color='red', fontsize=10, ha='center', va='bottom')
+
+# Get the current timestamp
+now = datetime.now()
+timestamp = now.strftime("%Y-%m-%d_%H-%M-%S")  # Format: YYYY-MM-DD_HH-MM-SS
+
+# Construct the filename with the timestamp
+filename = f"Time_series_plot_{timestamp}.png"
+
+# Save the plot with the dynamic filename
+plt.savefig(filename)
+
+# show the plot
+plt.show()
