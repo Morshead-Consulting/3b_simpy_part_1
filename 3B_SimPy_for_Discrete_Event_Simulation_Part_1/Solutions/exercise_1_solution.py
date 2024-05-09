@@ -144,3 +144,5 @@ ax.bar(result_names, results)
 
 figure_1.show()
 
+# Save the figure
+plt.savefig('my_plot.png')
